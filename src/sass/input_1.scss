@@ -1,0 +1,84 @@
+.input_1 {
+  .amount_form {
+    &_wrapper {
+      padding: 0 20px;
+    }
+    &_input {
+      position: absolute;
+      top: 0;
+      left: -9999px;
+      background: transparent;
+      height: 0;
+      width: 0;
+      text-indent: -9999px;
+      overflow: hidden;
+    }
+    &_inserted {
+      position: relative;
+      $input_height: 30px;
+      display: relative;
+      height: $input_height;
+      line-height: $input_height;
+      margin-top: 2px;
+      border-bottom: 1px solid #a2b8e9;
+      transition: padding .2s;
+      &:after {
+        content: '';
+        position: absolute;
+        display: block;
+        bottom: -1px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        transition: width .3s;
+        background: #fff;
+      }
+      &.focus {
+        padding: 5px;
+        &:after {
+          width: 100%;
+        }
+      }
+      &, .num {
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+      }
+      .num_wrapper {
+        display: inline-block;
+        vertical-align: top;
+        box-sizing: border-box;
+        .num {
+          display: inline-block;
+          max-width: 0;
+          line-height: $input_height;
+          vertical-align: top;
+          transform: translateY(-30px);
+          opacity: 0;
+          overflow: hidden;
+          transition: transform .15s linear, opacity .1s linear, max-width .1s linear;
+          &.added {
+            opacity: 1;
+            max-width: 50px;
+            transform: translateY(0);
+          }
+          &:after {
+            content: ',';
+            display: inline-block;
+            vertical-align: top;
+            width: 0;
+            overflow: hidden;
+            transition: width .3s;
+          }
+          &:nth-last-child(3n + 1):not(:last-child) {
+            &:after { width: 5px; }
+          }
+        }
+      }
+      .currency {
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+  }
+}

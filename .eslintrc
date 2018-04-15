@@ -1,0 +1,13 @@
+module.exports = {
+  "extends": "airbnb",
+  "globals": {
+    "React": true,
+    "ReactDOM": true,
+  },
+  "rules": {
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  }
+};
