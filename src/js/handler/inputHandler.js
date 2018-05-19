@@ -10,16 +10,20 @@ export default class Input {
       insertedNumber: null,
     };
     this.isTransition = false;
+    this.interval = null;
 
     this.focusEvent = this.setFocus.bind(this);
     this.focusOutEvent = this.setBlur.bind(this);
     this.insertEvent = this.insertedNumberFunc.bind(this);
+    this.keyUpEvent = this.keyUpFunc.bind(this);
 
     this.setEvent();
   }
 
   setEvent() {
-    this.input.on('keydown', this.insertEvent);
+    this.input
+      .on('keydown', this.insertEvent)
+      .on('keyup', this.keyUpEvent);
     this.input.on('blur', this.focusOutEvent);
     this.dpElement.on('click', this.focusEvent);
   }
@@ -64,6 +68,14 @@ export default class Input {
     }
   }
 
+  clearAction() {
+    const zeroChild = this.domWrapper.find('.num').last().clone().html('0').addClass('added');
+    this.domWrapper.html(zeroChild);
+    this.valueChecker.currentValue = '0';
+    this.updateInputValue();
+    this.isTransition = false;
+  }
+
   insertAction() {
     if (this.valueChecker.currentValue === '0') {
       this.valueChecker.currentValue = '';
@@ -82,8 +94,29 @@ export default class Input {
     }, 0);
   }
 
+  longPressedFunc() {
+    if (this.valueChecker.insertedNumber === KEY_TYPE.DELETE) {
+      this.clearAction();
+    } else {
+      return false;
+    }
+  }
+
+  keyUpFunc() {
+    clearInterval(this.interval);
+    this.interval = null;
+    return false;
+  }
+
   insertedNumberFunc(e) {
     this.valueChecker.insertedNumber = KEYCODE[e.keyCode];
+    if (!this.interval) {
+      this.interval = setInterval(() => {
+        e.preventDefault();
+        this.longPressedFunc();
+      }, 1000);
+    }
+    console.log(this.valueChecker);
     if (this.isTransition || this.checkIsNotChangeAvailable()) return;
     if (this.valueChecker.insertedNumber === KEY_TYPE.DELETE) {
       this.deleteAction();
